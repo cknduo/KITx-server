@@ -1,28 +1,19 @@
-const MongoClient = require('mongodb').MongoClient
+//const MongoClient = require('mongodb').MongoClient
+const mongoose = require ('mongoose')
+require ('dotenv').config()
 
-const dbUrl = 'mongodb+srv://project2_user:WiseWhales@evolveu.oaffh.mongodb.net/project2_database?retryWrites=true&w=majority'
+/* Moved to environment variable */
+//const dbUrl = 'mongodb+srv://project2_user:WiseWhales@evolveu.oaffh.mongodb.net/project2_database?retryWrites=true&w=majority'
+
 const databaseName = 'project2_database'
 
-let connectMongoClient = MongoClient.connect(dbUrl, { useUnifiedTopology: true })
+/* 11-May-2021:  Updated mongodb connection to mongoose connection */
+mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true });
 
-let getDb = connectMongoClient.then((client) => {
-    return client.db(databaseName)
-})
+const db = mongoose.connection;
 
-function getCollection(name) {
-    return getDb.then((db) => {
-        return db.collection(name)
-    })
-}
+db.once('open', (_) =>
+  console.log('MongoDB is now connected:', `${process.env.MONGODB_URL}`)
+);
 
-function close() {
-    return connectMongoClient.then((client) => {
-        return client.close()
-    })
-}
-
-module.exports = {
-    getDb,
-    getCollection,
-    close
-}
+db.on('error', (err) => console.error('MongoDB connection error!', err));

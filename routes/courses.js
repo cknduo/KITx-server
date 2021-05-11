@@ -1,27 +1,28 @@
+const Course = require ('../model/Course')
 const express = require('express')
 const router = express.Router()
-const db = require('../model/db')
-const ObjectId = require('mongodb').ObjectId;
 
-async function getCoursesCollection() {
-    return db.getCollection("courses")
-}
+/* get list of all courses*/
+router.get('/', async (req, res) => {
+    let data = await Course.find({})
+    console.info(`records retrieved from mongoose:`, data?.length)
+    res.send(data);
+})
 
-async function findUser(name) {
+/* add a course*/
+router.post ('/', async (req, res) => {
+    let courseToCreate = req.body
+    try {
+      let newCourse = new Course(courseToCreate)
+      await newCourse.save()
+      console.log("Created course", newCourse)
+      res.send(newCourse)  
+    }
+    catch (error) {
+      console.log(error)
+      res.sendStatus(500)
+    }
 
-    let collection = await getUsersCollection()
-    let cursor = collection.findOne( {"courseName" : name})
-    
-    return cursor
-}
-
-router.get('/courses/list', async (request, response) => {
-    let collection = await getCoursesCollection()
-    let cursor = collection.find({})
-    let courseList = await cursor.toArray()
-    response.send(courseList)
-    console.log(courseList)
-    return courseList  
 })
 
 module.exports = router
