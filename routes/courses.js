@@ -9,6 +9,19 @@ router.get('/', async (req, res) => {
     res.send(data);
 })
 
+/* get course by ID */
+router.get('/:id', async (req, res) => {
+  let data = await Course.findOne({_id: req.params.id})
+  try {
+      console.info(`course retrieved from mongoose:`, data)
+      res.send(data);
+  }
+  catch (error) {
+      console.error(error)
+      res.sendStatus(500)
+    }
+})
+
 /* add a course*/
 router.post ('/', async (req, res) => {
     let courseToCreate = req.body
@@ -22,8 +35,36 @@ router.post ('/', async (req, res) => {
       console.log(error)
       res.sendStatus(500)
     }
+})
 
+/* Update course by ID. */
+router.put('/:id', async function(req, res) {
+  let courseToUpdate = req.body
+  try {
+    let data = await Course.findByIdAndUpdate(req.params.id, courseToUpdate);
+    console.log("Updated Course", data)
+    res.send(data);
+  }
+  catch(error) {
+    console.log(error)
+    res.sendStatus(500)
+  }
+})
+
+/* Delete a Course by ID. */
+router.delete("/:id", async (req, res) => {
+  try {
+    const data = await Course.findByIdAndDelete(req.params.id);
+
+    if (!data) {
+      res.sendStatus(404);
+    } else {
+      console.log("Deleted Course", data);
+      res.send(data);
+    }
+  } catch (error) {
+    console.log(error)
+    res.sendStatus(500)  }
 })
 
 module.exports = router
-
