@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
 
 /* get course by ID */
 router.get('/:id', async (req, res) => {
-  let data = await Course.findOne({_id: req.params.id})
+  let data = await Course.findOne({instructor: req.params.id})
   try {
       console.info(`course retrieved from mongoose:`, data)
       res.send(data);
