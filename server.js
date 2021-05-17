@@ -4,6 +4,7 @@ const app = express()
 
 const users = require ('./routes/users')
 const courses = require ('./routes/courses')
+const carts = require ('./routes/carts')
 const login = require ('./routes/login')
 const register = require ('./routes/register')
 const useridgetter = require ('./routes/useridgetter')
@@ -37,6 +38,7 @@ require("./passportConfig")(passport);
 // Routes
 app.use('/users', users)  //Fix and merge with users later {students, teachers}
 app.use('/courses', courses)
+app.use('/carts', carts)
 app.use('/login', login)
 app.use('/register', register)
 app.use('/useridgetter', useridgetter)
