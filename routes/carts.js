@@ -18,6 +18,12 @@ router.post ('/', async (req, res) => {
     }
 })
 
+/* get list of all carts*/
+router.get('/', async (req, res) => {
+  let data = await Cart.find({})
+  console.info(`CART records retrieved from mongoose:`, data?.length)
+  res.send(data);
+})
 
 /* get list of all cart items by ID */
 router.get('/:id', async (req, res) => {
@@ -37,7 +43,7 @@ router.get('/:id', async (req, res) => {
 router.put('/:id', async function(req, res) {
     let cartToUpdate = req.body
     try {
-      let data = await Cart.findByIdAndUpdate(req.params.id, cartToUpdate);
+      let data = await Cart.findByIdAndUpdate(req.params.id, cartToUpdate)
       console.log("Updated Cart!", data)
       res.send(data);
     }
@@ -49,10 +55,9 @@ router.put('/:id', async function(req, res) {
 
 
 /* Delete a cart by ID */
-router.delete("/:id", async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
-    const data = await Cart.findByIdAndDelete(req.params.id);
-
+    const data = await Cart.findByIdAndDelete(req.params.id)
     if (!data) {
       res.sendStatus(404);
     } else {
