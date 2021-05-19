@@ -11,7 +11,7 @@ module.exports = function (passport) {
         bcrypt.compare(password, user.password, (err, result) => {
           if (err) throw err;
           if (result === true) {
-            return done(null, user);
+            return done(null, user)
           } else {
             return done(null, false);
           }
@@ -27,6 +27,7 @@ module.exports = function (passport) {
     Auth.findOne({ _id: id }, (err, user) => {
       const userInformation = {
         username: user.username,
+        userID: user.id
       };
       cb(err, userInformation);
     });
