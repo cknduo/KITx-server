@@ -5,13 +5,13 @@ const Schema = mongoose.Schema;
 const courseSchema = new Schema ({
         courseName: String,
         description: String,
-        keywords: [String], 
+        keywords: String, 
         rating: Number,
         instructor: String,
         requiredKits: { kitName: String, kitDescription: String},
         coursePrice: Number, 
-        preRequisites: [String]
-        //maxEnrollment: 50
+        preRequisites: Array,
+        instructorID: String,
+        courseStatus: String,        
 })
-
 module.exports = mongoose.model ('Course', courseSchema, 'courses')

@@ -1,19 +1,19 @@
-const User = require ('../model/User')
+const TeacherUser = require ('../model/TeacherUser')
 const express = require('express')
 const router = express.Router()
 
 /* get list of all users */
 router.get('/', async (req, res) => {
-    let data = await User.find({})
+    let data = await TeacherUser.find({})
     console.info(`records retrieved from mongoose:`, data?.length)
     res.send(data);
 })
 
 /* get user by ID */
 router.get('/:id', async (req, res) => {
-    let data = await User.findOne({_id: req.params.id})
+    let data = await TeacherUser.findOne({_id: req.params.id})
     try {
-        console.info(`user retrieved from mongoose:`, data)
+        console.info(`Teacher user retrieved from mongoose:`, data)
         res.send(data);
     }
     catch (error) {
@@ -22,13 +22,14 @@ router.get('/:id', async (req, res) => {
       }
 })
 
+
 /* add a User*/
 router.post ('/', async (req, res) => {
     let userToCreate = req.body
     try {
-      let newUser = new User(userToCreate)
+      let newUser = new TeacherUser(userToCreate)
       await newUser.save()
-      console.log("Created User", newUser)
+      console.log("Created Teacher User", newUser)
       res.send(newUser)  
     }
     catch (error) {
@@ -41,8 +42,8 @@ router.post ('/', async (req, res) => {
 router.put('/:id', async function(req, res) {
     let userToUpdate = req.body
     try {
-      let data = await User.findByIdAndUpdate(req.params.id, userToUpdate);
-      console.log("Updated User", data)
+      let data = await TeacherUser.findByIdAndUpdate(req.params.id, userToUpdate);
+      console.log("Updated Teacher User", data)
       res.send(data);
     }
     catch(error) {
@@ -54,12 +55,12 @@ router.put('/:id', async function(req, res) {
 /* Delete a User by ID. */
 router.delete("/:id", async (req, res) => {
     try {
-      const data = await User.findByIdAndDelete(req.params.id);
+      const data = await TeacherUser.findByIdAndDelete(req.params.id);
   
       if (!data) {
         res.sendStatus(404);
       } else {
-        console.log("Deleted User", data);
+        console.log("Deleted Teacher User", data);
         res.send(data);
       }
     } catch (error) {
