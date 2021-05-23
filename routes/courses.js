@@ -22,8 +22,37 @@ router.get('/:id', async (req, res) => {
     }
 })
 
+/* get course by instructor */
+router.get('/findByTeacher/:instructorID', async (req, res) => {
+  let data = await Course.find({instructorID: req.params.instructorID})
+
+  try {
+      console.info(`course retrieved from mongoose:`, data)
+      res.send(data);
+  }
+  catch (error) {
+      console.error(error)
+      res.sendStatus(500)
+    }
+})
+
+
+/* get course name */
+router.get('/findByName/:courseName', async (req, res) => {
+  let data = await Course.findOne({courseName: req.params.courseName})
+  try {
+      console.info(`course retrieved from mongoose:`, data)
+      res.send(data);
+  }
+  catch (error) {
+      console.error(error)
+      res.sendStatus(500)
+    }
+})
+
+
 /* add a course*/
-router.post ('/', async (req, res) => {
+router.post ('/addCourse', async (req, res) => {
     let courseToCreate = req.body
     try {
       let newCourse = new Course(courseToCreate)
