@@ -49,12 +49,12 @@ router.get('/findByName/:courseName', async (req, res) => {
     }
 })
 
-/* Update file info by fileID. */
-router.put('/:fileID', async function(req, res) {
+/* Update file info by courseID */
+router.put('/:courseID', async function(req, res) {
     let dataToUpdate = req.body
     console.log("dataToUpdate",dataToUpdate)
     try {
-      let data = await CourseMaterialRecords.findOneAndUpdate({fileID:req.params.fileID}, dataToUpdate, {new:true});
+      let data = await CourseMaterialRecords.findOneAndUpdate({courseID:req.params.courseID}, dataToUpdate, {new:true, upsert:true});
       console.log("Updated course record", data)
       res.send(data);
     }
