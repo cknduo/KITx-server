@@ -25,9 +25,9 @@ router.get('/', async (req, res) => {
   res.send(data);
 })
 
-/* get list of all cart items by ID */
+/* get list of all cart items by userID */
 router.get('/:id', async (req, res) => {
-    let data = await Cart.findOne({cartID: req.params.id})
+    let data = await Cart.findOne({userID: req.params.id})
     try {
         console.info(`Shopping Cart retrieved from mongoose:`, data)
         res.send(data);
@@ -39,7 +39,7 @@ router.get('/:id', async (req, res) => {
   })
 
 
-/* Update Cart by ID, to add or remove items from cart */
+/* Update Cart by userID, to add or remove items from cart */
 router.put('/:id', async function(req, res) {
     let cartToUpdate = req.body
     try {
@@ -54,7 +54,7 @@ router.put('/:id', async function(req, res) {
   })
 
 
-/* Delete a cart by ID */
+/* Delete a cart by userID */
 router.delete('/:id', async (req, res) => {
   try {
     const data = await Cart.findByIdAndDelete(req.params.id)
