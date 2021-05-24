@@ -3,7 +3,7 @@ const mongoose = require ('mongoose')
 const Schema = mongoose.Schema;
 
 const cartSchema = new Schema ({
-        cartID: String,
+        userID: String,
         cartItems: [String]
 })
 
