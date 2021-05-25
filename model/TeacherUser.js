@@ -11,8 +11,9 @@ const teacherUserSchema = new Schema ({
         postalCode: String,
         country: String,
         userID: String,
+        accountType: String,
         coursesTeaching: { current: [String], draft: [String], archived: [String] }
 },
 { versionKey: false }) // Removes Mongoose __v attribute in database
 
-module.exports = mongoose.model ('TeacherUser', teacherUserSchema, 'teacherUsers')
+module.exports = mongoose.model ('TeacherUser', teacherUserSchema, 'users')

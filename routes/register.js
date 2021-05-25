@@ -17,6 +17,7 @@ createNewStudent = (req, exportedID) => {
     postalCode: req.body.postalCode,
     country: req.body.country,
     userID: exportedID,
+    accountType: req.body.accountType,
     coursesLearning: { enrolled: [], bookmarked: [], completed: [] }
   })
 
@@ -34,6 +35,7 @@ createNewTeacher = (req, exportedID) => {
     postalCode: req.body.postalCode,
     country: req.body.country,
     userID: exportedID,
+    accountType: req.body.accountType,
     coursesTeaching: { current: [], draft: [], archived: [] }
   })
 
