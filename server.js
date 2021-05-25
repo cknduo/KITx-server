@@ -2,10 +2,10 @@ require ('dotenv').config()
 const express = require('express')
 const app = express()
 
-//const users = require ('./routes/users')
+const users = require ('./routes/users')
 
-const teachers = require ('./routes/teacherUsers')
-const students = require ('./routes/studentUsers')
+//const teachers = require ('./routes/teacherUsers')
+//const students = require ('./routes/studentUsers')
 const courseMaterial = require('./routes/courseMaterial')
 const courseMaterialRecords = require('./routes/courseMaterialRecords')
 
@@ -50,9 +50,9 @@ app.use(passport.session());
 require("./passportConfig")(passport);
 
 // Routes
-//app.use('/users', users)  //Fix and merge with users later {students, teachers}
-app.use('/students', students)
-app.use('/teachers', teachers)
+app.use('/users', users)  //Fix and merge with users later {students, teachers}
+//app.use('/students', students)
+//app.use('/teachers', teachers)
 
 app.use('/courseMaterial', courseMaterial)
 app.use ('/courseMaterialRecords', courseMaterialRecords)

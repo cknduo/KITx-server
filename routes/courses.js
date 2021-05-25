@@ -22,9 +22,15 @@ router.get('/:id', async (req, res) => {
     }
 })
 
-/* get course by instructor */
-router.get('/findByTeacher/:instructorID', async (req, res) => {
-  let data = await Course.find({instructorID: req.params.instructorID})
+/* get course by teacher and filtered on criteria */
+router.get('/findByTeacher/:teacherID', async (req, res) => {
+  let querystring = req.query/*req.params.teacherID /*`{teacherID: ${req.params.teacherID}, 
+    status: ${req.query.courseStatus}}`*/
+    console.log("querystring",{teacherID: req.params.teacherID, 
+      status: req.query.courseStatus})
+  
+  let data = await Course.find({teacherID: req.params.teacherID, 
+                                courseStatus: req.query.courseStatus})
 
   try {
       console.info(`course retrieved from mongoose:`, data)
@@ -35,6 +41,22 @@ router.get('/findByTeacher/:instructorID', async (req, res) => {
       res.sendStatus(500)
     }
 })
+
+/* get course by teacher */
+router.get('/findByTeacher/:teacherID', async (req, res) => {
+  let data = await Course.find({teacherID: req.params.teacherID})
+
+  try {
+      console.info(`course retrieved from mongoose:`, data)
+      res.send(data);
+  }
+  catch (error) {
+      console.error(error)
+      res.sendStatus(500)
+    }
+})
+
+
 
 
 /* get course name */
@@ -70,7 +92,7 @@ router.post ('/addCourse', async (req, res) => {
 router.put('/:id', async function(req, res) {
   let courseToUpdate = req.body
   try {
-    let data = await Course.findByIdAndUpdate(req.params.id, courseToUpdate);
+    let data = await Course.findByIdAndUpdate(req.params.id, courseToUpdate, {new:true, upsert:true});
     console.log("Updated Course", data)
     res.send(data);
   }
@@ -79,6 +101,33 @@ router.put('/:id', async function(req, res) {
     res.sendStatus(500)
   }
 })
+
+/* Update module files (nested object) by ID. */
+router.put('/:id/modulefiles', async function(req, res) {
+  let moduleFiletoAdd = req.body
+  try {
+    let coursedata = await Course.findById(req.params.id)
+    console.log("module files",coursedata.moduleFiles)
+    coursedata.moduleFiles.push(moduleFiletoAdd)
+    const updated = await coursedata.save()
+    res.send(updated)
+    
+//    console.log("Updated Course", data)
+//    res.send(updated);
+  }
+  catch(error) {
+    console.log(error)
+    res.sendStatus(500)
+  }
+  
+  //console.log(moduleFiletoAdd)
+  //res.send(moduleFiletoAdd)
+})
+
+
+
+
+
 
 /* Delete a Course by ID. */
 router.delete("/:id", async (req, res) => {

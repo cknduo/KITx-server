@@ -37,10 +37,10 @@ router.post('/upload/:courseID/:fileUse/:sessionNumber', async (req, res) => {
             console.log('done!')
             currentfileID = file._id
             console.log('filename after post',currentfileID)
-            createRecord()
-            res.send(currentfileID)
+            //createRecord()
+            res.send(file)
         })
-
+/*
     async function createRecord () {    
     //record filenameID and courseMaterial information into courseMaterialRecords
     let courseMaterialRecordToCreate = {
@@ -63,6 +63,8 @@ router.post('/upload/:courseID/:fileUse/:sessionNumber', async (req, res) => {
         }
 
     }    
+*/
+
 })
 
 router.get('/download/', (req, res) => {
@@ -80,6 +82,33 @@ router.get('/download/', (req, res) => {
             res.send('Done downloading')
         })
 })
+
+router.get('/image/:fileID', (req,res) => {
+
+    let gridFSbucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+         chuckSizeBytes: 1024,
+         bucketName: 'courseMaterial'
+    })
+    
+    const pictureID = mongoose.Types.ObjectId(req.params.fileID);
+    console.log(pictureID)
+    //const pictureID = new ObjectId(req.params.fileID);
+
+    //find file associated with fileID
+    let filename = gridFSbucket.find({_id: req.params.fileID})
+    console.log(filename)
+
+    gridFSbucket.openDownloadStream(pictureID)
+        .pipe(res);
+//    const pictureStream = gridFSbucket.readByID(pictureID)
+    //pictureStream.on('error', (err) => {callback (err,null)})
+    
+    //Pass object stream straight back to browser    
+    //pictureStream.pipe(res)
+    //res.send("get called")
+    console.log("get called")
+});
+
 
 
 module.exports = router
