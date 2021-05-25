@@ -102,6 +102,33 @@ router.put('/:id', async function(req, res) {
   }
 })
 
+/* Update module files (nested object) by ID. */
+router.put('/:id/modulefiles', async function(req, res) {
+  let moduleFiletoAdd = req.body
+  try {
+    let coursedata = await Course.findById(req.params.id)
+    console.log("module files",coursedata.moduleFiles)
+    coursedata.moduleFiles.push(moduleFiletoAdd)
+    const updated = await coursedata.save()
+    res.send(updated)
+    
+//    console.log("Updated Course", data)
+//    res.send(updated);
+  }
+  catch(error) {
+    console.log(error)
+    res.sendStatus(500)
+  }
+  
+  //console.log(moduleFiletoAdd)
+  //res.send(moduleFiletoAdd)
+})
+
+
+
+
+
+
 /* Delete a Course by ID. */
 router.delete("/:id", async (req, res) => {
   try {

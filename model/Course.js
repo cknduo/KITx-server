@@ -2,24 +2,10 @@ require ('./db')
 const mongoose = require ('mongoose')
 const Schema = mongoose.Schema;
 
-//subdocument modules schema
-// const moduleFileSchema = new Schema ({
-
-//         fileID: String,
-//         filename:String,
-//         description:String
-// })
-
- const moduleSchema = new Schema ({
-         moduleNumber:String, 
-         description:String, 
-//         moduleFiles:[moduleFileSchema]
- })
-
 const courseSchema = new Schema ({
         courseName: String,
         description: String,
-        keywords: String, 
+        keywords: Array, 
         rating: Number,
         teacherID: String,
         studentIDs: Array,
@@ -31,7 +17,9 @@ const courseSchema = new Schema ({
         courseImage: {fileID: String, filename:String, description:String},        
         certificate: {fileID: String, filename:String, description:String},        
         kitImage: {fileID: String, filename:String, description:String},        
-        modules: [moduleSchema],
+        modules: [{moduleNumber:String, description:String}],
+        moduleFiles: [{moduleNumber:String, fileID:String, description:String}]
+
 })
 
 

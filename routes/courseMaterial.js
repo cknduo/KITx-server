@@ -38,7 +38,7 @@ router.post('/upload/:courseID/:fileUse/:sessionNumber', async (req, res) => {
             currentfileID = file._id
             console.log('filename after post',currentfileID)
             //createRecord()
-            res.send(currentfileID)
+            res.send(file)
         })
 /*
     async function createRecord () {    
