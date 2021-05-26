@@ -1,6 +1,5 @@
 const Auth = require('../model/Authentication')
-const StudentUser = require('../model/StudentUser')
-const TeacherUser = require('../model/TeacherUser')
+const User = require('../model/User')
 const express = require('express')
 const router = express.Router()
 const bcrypt = require("bcryptjs")
@@ -8,7 +7,7 @@ const bcrypt = require("bcryptjs")
 //Student profile
 createNewStudent = (req, exportedID) => {
 
-  const newStudent = new StudentUser({
+  const newStudent = new User({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     address: req.body.address,
@@ -26,7 +25,7 @@ createNewStudent = (req, exportedID) => {
 
 //Teacher profile
 createNewTeacher = (req, exportedID) => {
-  const newTeacher = new TeacherUser({
+  const newTeacher = new User({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     address: req.body.address,
