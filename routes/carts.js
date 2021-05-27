@@ -43,7 +43,8 @@ router.get('/:id', async (req, res) => {
 router.put('/:id', async function(req, res) {
     let cartToUpdate = req.body
     try {
-      let data = await Cart.findByIdAndUpdate(req.params.id, cartToUpdate)
+      // let data = await Cart.findByIdAndUpdate({userID: req.params.id}, cartToUpdate)
+      let data = await Cart.findOneAndUpdate({userID: req.params.id}, cartToUpdate)
       console.log("Updated Cart!", data)
       res.send(data);
     }
