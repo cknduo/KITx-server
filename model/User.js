@@ -1,8 +1,8 @@
-require ('./db')
-const mongoose = require ('mongoose')
+require('./db')
+const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
-const UserSchema = new Schema ({
+const userSchema = new Schema({
         firstName: String,
         lastName: String,
         address: String,
@@ -11,11 +11,8 @@ const UserSchema = new Schema ({
         postalCode: String,
         country: String,
         userID: String,
-        accountType: String,
-        coursesLearning: { enrolled: [String], bookmarked: [String], completed: [String] },
-        coursesTeaching: { current: [String], draft: [String], archived: [String] }
-
+        accountType: String
 },
-{ versionKey: false }) // Removes Mongoose __v attribute in database
+        { strict: false, versionKey: false }) // {versionKey: false} removes Mongoose __v attribute in database
 
-module.exports = mongoose.model ('User', UserSchema, 'users')
+module.exports = mongoose.model('User', userSchema, 'users')
