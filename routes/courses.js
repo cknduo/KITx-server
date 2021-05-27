@@ -9,6 +9,20 @@ router.get('/', async (req, res) => {
     res.send(data);
 })
 
+router.get('/findMultiple', async (req, res) => {
+  //multipleIDs come in as a route, with commas separating each ID.  STring cannot have spaces, only commas
+  let multipleIDs = req.query.multipleIDs
+
+  //split IDs into an array format
+  let multipleIDsArray = multipleIDs.split(',')
+
+  //find multiple IDs that match the array
+  let data = await Course.find({_id: {$in:multipleIDsArray}})
+  res.send(data)
+
+})
+
+
 /* get course by ID */
 router.get('/:id', async (req, res) => {
   let data = await Course.findOne({_id: req.params.id})
@@ -21,6 +35,7 @@ router.get('/:id', async (req, res) => {
       res.sendStatus(500)
     }
 })
+
 
 /* get course by teacher and filtered on criteria */
 router.get('/findByTeacher/:teacherID', async (req, res) => {
@@ -72,6 +87,19 @@ router.get('/findByName/:courseName', async (req, res) => {
     }
 })
 
+/* get module files based on courseID and module number.  Module files are nested in an array */
+// router.get('/:id/moduleFiles/:moduleNumber', async (req, res) => {
+//   let data = await Course.find({_id: req.params.id},{'moduleNumber.$':req.params.moduleNumber})
+//   try {
+//       console.info(`course retrieved from mongoose:`, data)
+//       res.send(data);
+//   }
+//   catch (error) {
+//       console.error(error)
+//       res.sendStatus(500)
+//     }
+// })
+
 
 /* add a course*/
 router.post ('/addCourse', async (req, res) => {
@@ -102,6 +130,24 @@ router.put('/:id', async function(req, res) {
   }
 })
 
+/* Delete module files (nested object) by ID. */
+router.put('/:id/modulefiles/delete/:fileID', async function(req, res) {
+  let moduleFiletoDelete = req.body
+  try {
+
+    let coursedata = await Course.findOneAndUpdate(
+      { "_id": req.params.id},
+      {$pull: {moduleFiles:{fileID:req.params.fileID}}},
+      {new:true})
+      res.send("module file deleted")
+  }
+  catch(error) {
+    console.log(error)
+    res.sendStatus(500)
+  }
+})
+
+
 /* Update module files (nested object) by ID. */
 router.put('/:id/modulefiles', async function(req, res) {
   let moduleFiletoAdd = req.body
@@ -123,6 +169,7 @@ router.put('/:id/modulefiles', async function(req, res) {
   //console.log(moduleFiletoAdd)
   //res.send(moduleFiletoAdd)
 })
+
 
 
 

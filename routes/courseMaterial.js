@@ -27,20 +27,31 @@ router.post('/upload/', async (req, res) => {
 
 })
 
-router.get('/download/', (req, res) => {
+router.get('/download/:fileID', (req, res) => {
     let gridFSbucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
         chuckSizeBytes: 1024,
         bucketName: 'courseMaterial'
     
     })
-    console.log("GridFSbucket", gridFSbucket)
-    gridFSbucket.openDownloadStreamByName('jaguar.jpg')
-        .pipe(fs.createWriteStream('./jaguar.jpg'))
+    const downloadID = mongoose.Types.ObjectId(req.params.fileID);
+    
+    let findCursor = gridFSbucket.find({_id: req.params.fileID})
+    
+    findCursor.toArray()
+        .then((results) => {
+            console.log(results)
+        })
+
+
+
+    res.send("")
+    /*gridFSbucket.openDownloadStream(downloadID)
+        .pipe(fs.createWriteStream(`c:\kitx\${fileID/jaguar.jpg'))
         .on('error', (error) => { console.log('error writing picture') })
         .on('finish', () => {
             console.log('done downloading!')
             res.send('Done downloading')
-        })
+        })*/
 })
 
 router.get('/image/:fileID', (req,res) => {
@@ -56,17 +67,30 @@ router.get('/image/:fileID', (req,res) => {
 
     //find file associated with fileID
     let filename = gridFSbucket.find({_id: req.params.fileID})
-    console.log(filename)
+    console.log(filename.filename)
 
     gridFSbucket.openDownloadStream(pictureID)
         .pipe(res);
-//    const pictureStream = gridFSbucket.readByID(pictureID)
+
+     
+//const pictureStream = gridFSbucket.readByID(pictureID)
     //pictureStream.on('error', (err) => {callback (err,null)})
     
     //Pass object stream straight back to browser    
     //pictureStream.pipe(res)
     //res.send("get called")
     console.log("get called")
+});
+
+router.delete('/delete/:fileID', (req,res) => {
+
+    let gridFSbucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+         chuckSizeBytes: 1024,
+         bucketName: 'courseMaterial'
+    })
+        
+     gridFSbucket.delete(req.params.fileID)
+     res.send("file was deleted")
 });
 
 
