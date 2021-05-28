@@ -66,21 +66,15 @@ router.get('/image/:fileID', (req,res) => {
     //const pictureID = new ObjectId(req.params.fileID);
 
     //find file associated with fileID
-    let filename = gridFSbucket.find({_id: req.params.fileID})
-    console.log(filename.filename)
+    //let filename = gridFSbucket.find({_id: req.params.fileID})
+    //console.log(filename.filename)
 
+    //Pass object stream straight back to browser    
     gridFSbucket.openDownloadStream(pictureID)
         .pipe(res);
 
-     
-//const pictureStream = gridFSbucket.readByID(pictureID)
-    //pictureStream.on('error', (err) => {callback (err,null)})
-    
-    //Pass object stream straight back to browser    
-    //pictureStream.pipe(res)
-    //res.send("get called")
-    console.log("get called")
 });
+
 
 router.delete('/delete/:fileID', (req,res) => {
 
@@ -90,6 +84,7 @@ router.delete('/delete/:fileID', (req,res) => {
     })
         
      gridFSbucket.delete(req.params.fileID)
+     console.log("file was deleted", fileID)
      res.send("file was deleted")
 });
 
