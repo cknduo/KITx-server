@@ -18,7 +18,7 @@ const courseSchema = new Schema ({
         certificate: {fileID: String, filename:String, description:String},        
         kitImage: {fileID: String, filename:String, description:String},        
         modules: [{moduleNumber:String, description:String}],
-        moduleFiles: [{moduleNumber:String, fileID:String, description:String}]
+        moduleFiles: [{moduleNumber:String, fileID:String, description:String, filename:String}]
 
 })
 
