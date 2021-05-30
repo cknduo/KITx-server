@@ -42,7 +42,7 @@ router.post ('/', async (req, res) => {
 router.put('/:id', async function(req, res) {
     let userToUpdate = req.body
     try {
-      let data = awaitUser.findByIdAndUpdate(req.params.id, userToUpdate);
+      let data = await User.findByIdAndUpdate(req.params.id, userToUpdate);
       console.log("Updated User", data)
       res.send(data);
     }
