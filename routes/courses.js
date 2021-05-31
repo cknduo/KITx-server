@@ -130,6 +130,9 @@ router.put('/:id', async function(req, res) {
   }
 })
 
+
+
+
 /* Delete module files (nested object) by ID. */
 router.put('/:id/modulefiles/delete/:fileID', async function(req, res) {
   let moduleFiletoDelete = req.body
@@ -157,20 +160,47 @@ router.put('/:id/modulefiles', async function(req, res) {
     coursedata.moduleFiles.push(moduleFiletoAdd)
     const updated = await coursedata.save()
     res.send(updated)
-    
-//    console.log("Updated Course", data)
-//    res.send(updated);
+
   }
   catch(error) {
     console.log(error)
     res.sendStatus(500)
   }
-  
-  //console.log(moduleFiletoAdd)
-  //res.send(moduleFiletoAdd)
+
 })
 
+/* Update module files (nested object) by ID. */
+router.put('/:id/modules', async function(req, res) {
+  let moduletoAdd = req.body
+  try {
+    let coursedata = await Course.findById(req.params.id)
+    coursedata.modules.push(moduletoAdd)
+    const updated = await coursedata.save()
+    res.send(updated)
+  }
+  catch (error) {
+    console.log(error)
+    res.sendStatus(500)
+  }
 
+})
+
+/* Update module description by course ID. */
+router.put('/:id/module/description', async function(req, res) {
+  let moduleToUpdate = req.body
+  let moduleNumberToUpdate = moduleToUpdate.moduleNumber
+  let moduleDescription = moduleToUpdate.description
+  try {
+    let data = await Course.findOneAndUpdate({"_id": req.params.id, "modules.moduleNumber":`${moduleNumberToUpdate}`}, {$set: {"modules.$.description":`${moduleDescription}`}}, {new:true, upsert:true});
+    //let data = await Course.findOneAndUpdate({"_id": req.params.id, "modules.moduleNumber":"3"}, {$set: {"modules.$.description":"NEwTEST"}}, {new:true, upsert:true});
+    console.log("Updated Module", data)
+    res.send(data);
+  }
+  catch(error) {
+    console.log("Error with module description update",error)
+    res.sendStatus(500)
+  }
+})
 
 
 
