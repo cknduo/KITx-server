@@ -15,8 +15,13 @@ npm install
 - Go to application folder
 - In console - type:
 
+If you have Nodemon installed:
 ```zsh
-node server.js
+npm run dev
+```
+Otherwise:
+```zsh
+npm start
 ```
 
 - To start the MongoDB server - type:

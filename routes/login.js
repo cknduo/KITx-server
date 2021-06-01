@@ -7,7 +7,7 @@ router.post("/", async (req, res, next) => {
   console.log("Login Request is: ", req.body)
   passport.authenticate("local", (err, user, info) => {
     if (err) throw err
-    if (!user) res.send("Invalid Username/Password or No User Exists")
+    if (!user) res.send({"error": "Invalid Username/Password or No User Exists"})
     else {
       req.logIn(user, async (err) => {
         if (err) throw err
