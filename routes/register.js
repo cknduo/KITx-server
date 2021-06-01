@@ -5,9 +5,9 @@ const router = express.Router()
 const bcrypt = require("bcryptjs")
 
 //Student profile
-createNewStudent = (req, exportedID) => {
+createNewStudent = async (req, exportedID) => {
 
-  const newStudent = new User({
+  let newStudent = new User({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     address: req.body.address,
@@ -20,11 +20,13 @@ createNewStudent = (req, exportedID) => {
     coursesLearning: { enrolled: [], bookmarked: [], completed: [] }
   })
 
-  newStudent.save()
+  newStudent = await newStudent.save()
+
+  return newStudent
 }
 
 //Teacher profile
-createNewTeacher = (req, exportedID) => {
+createNewTeacher = async (req, exportedID) => {
   const newTeacher = new User({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
@@ -38,7 +40,9 @@ createNewTeacher = (req, exportedID) => {
     coursesTeaching: { current: [], draft: [], archived: [] }
   })
 
-  newTeacher.save()
+  newTeacher = await newTeacher.save()
+
+  return newTeacher
 }
 
 router.post("/", (req, res) => {
@@ -46,7 +50,7 @@ router.post("/", (req, res) => {
   Auth.findOne({ username: req.body.username }, async (err, doc) => {
 
     if (err) throw err
-    if (doc) res.send("User Already Exists")
+    if (doc) res.send({ "error": "User Already Exists" })
     if (!doc) {
       // Create Authentication Profile
       const hashedPassword = await bcrypt.hash(req.body.password, 10)
@@ -62,15 +66,18 @@ router.post("/", (req, res) => {
 
           //Create Student profile
           if (req.body.accountType === "student") {
-            await createNewStudent(req, accountID)
+            await createNewStudent(req, authAccount.id)
+            const info = await User.findOne({ "userID": authAccount.id })
+            res.send({ "msg": "User Created and Successfully Authenticated", "userInfo": info, "userID": authAccount.id })
           }
 
           //Create Teacher profile
           if (req.body.accountType === "teacher") {
-            await createNewTeacher(req, accountID)
+            await createNewTeacher(req, authAccount.id)
+            const info = await User.findOne({ "userID": authAccount.id })
+            res.send({ "msg": "User Created and Successfully Authenticated", "userInfo": info, "userID": authAccount.id })
           }
 
-          res.send("User Created")
         }
       })
     }
