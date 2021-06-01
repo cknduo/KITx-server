@@ -9,7 +9,6 @@ router.post ('/', async (req, res) => {
     try {
       let newCart = new Cart(cartToCreate)
       await newCart.save()
-      console.log("Created new Cart!", newCart)
       res.send(newCart)  
     }
     catch (error) {
@@ -21,7 +20,6 @@ router.post ('/', async (req, res) => {
 /* get list of all carts*/
 router.get('/', async (req, res) => {
   let data = await Cart.find({})
-  console.info(`CART records retrieved from mongoose:`, data?.length)
   res.send(data);
 })
 
@@ -29,7 +27,6 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     let data = await Cart.findOne({userID: req.params.id})
     try {
-        console.info(`Shopping Cart retrieved from mongoose:`, data)
         res.send(data);
     }
     catch (error) {
@@ -45,7 +42,6 @@ router.put('/:id', async function(req, res) {
     try {
       // let data = await Cart.findByIdAndUpdate({userID: req.params.id}, cartToUpdate)
       let data = await Cart.findOneAndUpdate({userID: req.params.id}, cartToUpdate)
-      console.log("Updated Cart!", data)
       res.send(data);
     }
     catch(error) {
@@ -62,7 +58,6 @@ router.delete('/:id', async (req, res) => {
     if (!data) {
       res.sendStatus(404);
     } else {
-      console.log("Deleted Cart!", data);
       res.send(data);
     }
   } catch (error) {
