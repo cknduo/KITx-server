@@ -6,7 +6,7 @@ const router = express.Router()
 router.get('/', async (req, res) => {
   let queryString = req.query
   console.log(queryString)
-  let data = await Course.find(queryString)
+  let data = await Course.find(queryString).sort({_id:-1})
 
   try {
     res.send(data);
