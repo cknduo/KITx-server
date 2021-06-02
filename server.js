@@ -4,7 +4,7 @@ const app = express()
 
 // Route Requirements [Express Router]
 const courseMaterial = require('./routes/courseMaterial')
-const courseMaterialRecords = require('./routes/courseMaterialRecords')
+//const courseMaterialRecords = require('./routes/courseMaterialRecords')
 const users = require ('./routes/users')
 const courses = require ('./routes/courses')
 const carts = require ('./routes/carts')
@@ -45,7 +45,7 @@ require("./passportConfig")(passport);
 // Routes [Express Router]
 app.use('/users', users)
 app.use('/courseMaterial', courseMaterial)
-app.use ('/courseMaterialRecords', courseMaterialRecords)
+
 app.use('/courses', courses)
 app.use('/carts', carts)
 app.use('/login', login)

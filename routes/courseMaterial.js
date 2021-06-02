@@ -16,7 +16,7 @@ router.post('/upload/', async (req, res) => {
     })
 
     //store file
-    console.log("GridFSbucket", gridFSbucket)
+    //console.log("GridFSbucket", gridFSbucket)
 
     streamifier.createReadStream(filedata)
         .pipe(gridFSbucket.openUploadStream(filename))
@@ -27,7 +27,7 @@ router.post('/upload/', async (req, res) => {
 
 })
 
-router.get('/download/:fileID', (req, res) => {
+router.get('/download/:fileID', async (req, res) => {
     let gridFSbucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
         chuckSizeBytes: 1024,
         bucketName: 'courseMaterial'
@@ -39,7 +39,6 @@ router.get('/download/:fileID', (req, res) => {
     
     findCursor.toArray()
         .then((results) => {
-            console.log(results)
         })
 
 
@@ -62,7 +61,6 @@ router.get('/image/:fileID', (req,res) => {
     })
     
     const pictureID = mongoose.Types.ObjectId(req.params.fileID);
-    console.log(pictureID)
     //const pictureID = new ObjectId(req.params.fileID);
 
     //find file associated with fileID
@@ -76,16 +74,32 @@ router.get('/image/:fileID', (req,res) => {
 });
 
 
-router.delete('/delete/:fileID', (req,res) => {
+router.delete('/delete/:fileID', async (req,res) => {
 
     let gridFSbucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
          chuckSizeBytes: 1024,
          bucketName: 'courseMaterial'
     })
-        
-     gridFSbucket.delete(req.params.fileID)
-     console.log("file was deleted", fileID)
-     res.send("file was deleted")
+
+    const fileID = mongoose.Types.ObjectId(req.params.fileID)
+    let fileCheck 
+
+     let cursor = await gridFSbucket.find({_id: fileID})
+     cursor.toArray()
+        .then((results) => {
+            fileCheck = results.length
+            console.log(`length is ${fileCheck}, looking for ${fileID}`)
+
+            if (fileCheck === 0) {
+                console.log("File has already been removed from database")
+                res.send ("File has already been removed from database")
+            } else {
+                gridFSbucket.delete(fileID)
+                console.log(`File ${fileID} was deleted from database`)
+                res.send (`File ${fileID} was deleted from database`)
+            }      
+    })
+
 });
 
 
