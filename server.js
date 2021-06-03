@@ -45,7 +45,6 @@ require("./passportConfig")(passport);
 // Routes [Express Router]
 app.use('/users', users)
 app.use('/courseMaterial', courseMaterial)
-
 app.use('/courses', courses)
 app.use('/carts', carts)
 app.use('/login', login)
